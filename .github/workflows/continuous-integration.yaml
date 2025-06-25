@@ -8,6 +8,7 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-Dwarnings"
 
 jobs:
   build:
@@ -15,6 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: arduino/setup-protoc@v3.0.0
     - run: cargo fmt --verbose --check
     - run: cargo clippy
     - run: cargo build --verbose

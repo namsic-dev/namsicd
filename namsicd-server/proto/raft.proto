@@ -1,0 +1,42 @@
+syntax = "proto3";
+package namsicdraftpb;
+
+message Void {}
+
+message RequestVote {
+    uint64 last_log_index = 1;
+    uint64 last_log_term = 2;
+}
+message ResponseVote {
+    bool vote_granted = 1;
+}
+
+message LogEntry {
+    uint64 term = 1;
+    bytes data = 2;
+}
+message RequestAppendEntries {
+    uint64 prev_log_index = 1;
+    uint64 prev_log_term = 2;
+    repeated LogEntry entries = 3;
+    uint64 leader_commit = 4;
+}
+message ResponseAppendEntries {
+    bool success = 1;
+    uint64 last_log_index = 2;
+}
+
+message RaftMessage {
+    uint64 term = 1;
+    uint64 from = 2;
+    oneof content {
+        RequestVote request_vote = 3;
+        ResponseVote response_vote = 4;
+        RequestAppendEntries request_append_entries = 5;
+        ResponseAppendEntries response_append_entries = 6;
+    }
+}
+
+service Raft {
+  rpc Dispatch(RaftMessage) returns (Void);
+}
